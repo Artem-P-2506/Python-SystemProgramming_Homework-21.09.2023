@@ -1,4 +1,5 @@
 import os
+import shutil
 
 def sortFiles(directoryPath, pathToSaveFiles):
     if os.path.exists(directoryPath) and os.path.exists(pathToSaveFiles):
@@ -9,14 +10,14 @@ def sortFiles(directoryPath, pathToSaveFiles):
             if not os.path.exists(saveDirectory):
                 os.mkdir(saveDirectory)
             os.chdir(os.path.join(pathToSaveFiles, saveDirectory))
-            subdirectories = ['Images', 'Videos', 'Documents', 'Other']
+            subdirectories = ['Pictures', 'Videos', 'Documents', 'Other']
             for item in subdirectories:
                 if not os.path.exists(item):
                     os.mkdir(item)
 
             PICTURE_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "bmp", "tiff", "webp"]
             VIDEO_EXTENSIONS = ["mp4", "avi", "mkv", "mov", "wmv", "flv", "webm"]
-            DOCUMENT_EXTENSIONS = ["doc", "docx", "pdf", "txt", "rtf", "odt"]
+            DOCUMENT_EXTENSIONS = ["doc", "docx", "pdf", "TXT", "rtf", "odt"]
             for item in files:
                 fileExtension = item.split('.')[-1]
                 if fileExtension in PICTURE_EXTENSIONS:
@@ -31,10 +32,7 @@ def sortFiles(directoryPath, pathToSaveFiles):
 
                 try:
                     filePath = os.path.join(directoryPath, item)
-                    with open(filePath, 'rb') as file:
-                        data = file.read()
-                        with open(filePath, 'wb') as newFile:
-                            newFile.write(data)
+                    shutil.copy2(filePath, item)
                 except:
                     print(f"Ошибка при чтении/записи файла '{item}'!")
             print("Сортировка файлов успешно выполнена!")
